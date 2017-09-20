@@ -14,7 +14,8 @@ RUN apt-get update && \
 
 # PHP EXTENSIONS
 RUN pecl install redis-3.1.3 && \
-    docker-php-ext-enable redis
+    docker-php-ext-enable redis && \
+    docker-php-ext-install pdo pdo_mysql
 
 # APACHE MODULES
 RUN a2enmod rewrite
