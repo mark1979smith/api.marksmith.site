@@ -37,15 +37,6 @@ USER deployuser
 RUN rm -rf /var/www/html && \
     ln -s /var/www/web /var/www/html
 
-# RUN COMPOSER to generate parameters.yml file
-RUN /usr/local/bin/php -r "copy('https://getcomposer.org/installer', 'composer-setup.php');"
-RUN /usr/local/bin/php -r "copy('https://composer.github.io/installer.sig', 'composer-installer.sig');"
-RUN /usr/local/bin/php -r "if (hash_file('SHA384', 'composer-setup.php') === trim(file_get_contents('composer-installer.sig'))) { echo 'Installer verified'; } else { echo 'Installer corrupt'; unlink('composer-setup.php'); } echo PHP_EOL;"
-RUN /usr/local/bin/php composer-setup.php
-RUN /usr/local/bin/php -r "unlink('composer-setup.php');"
-RUN /usr/local/bin/php -r "unlink('composer-installer.sig');"
-RUN /usr/local/bin/php composer.phar install -n
-
 # SET UP DEPLOYMENT KEY TO ALLOW GIT PULL
 RUN  mkdir -p ~/.ssh && \
     echo "c3NoLXJzYSBBQUFBQjNOemFDMXljMkVBQUFBREFRQUJBQUFCQVFESXFQWWYxSlhxNlVuSGNlTmpER3F6VTVDUlZxN2plWmZpdUFRU3JqRTd4Zk9TZkNUdzgzTGM5Zk1ITXBQQjFQR3g5K1NKc3NYdkNPbmI5ZzM0UWY2UXc2S1l1KzllMmx2a3FDbVhxNzZuZFQzcnhIN1FuT2ppdUs3S3pMem1pWkpHQ016WXF0MmYyVGRUM3Y5aGNYMnBQa0p5QllkY2ZxdUNId0wrbHFrZWh2d1BXK2VNbFlWQWJIN3RGOXRGSkVOVFJpRk0vL2NDRHZUVmtnOGgwa1NSYlFtZk12ZlI1QjNGdGQ5eFBiZ05BcUNiaTV6TENiS2FQRWtPaUxFaHEvVXQ5QlR2eDVmSHVPMGxQeFptZ01LSGYzVUhUTmNOUEFId1BUWlhDUUxyRDQ2WTBNTzk0NTg3N3lBdWY4OXBsYTJvN3M0bXlHWGgrTXRLN0VBQVRXVkIgZGVwbG95dXNlckBhcGkubWFya3NtaXRoLnNpdGUNCg==" | base64 --decode > ~/.ssh/id_rsa.pub && \
@@ -54,6 +45,14 @@ RUN  mkdir -p ~/.ssh && \
     ssh-keyscan github.com >> ~/.ssh/known_hosts && \
     git clone git@github.com:mark1979smith/api.marksmith.site.git .
 
+# RUN COMPOSER to generate parameters.yml file
+RUN /usr/local/bin/php -r "copy('https://getcomposer.org/installer', 'composer-setup.php');"
+RUN /usr/local/bin/php -r "copy('https://composer.github.io/installer.sig', 'composer-installer.sig');"
+RUN /usr/local/bin/php -r "if (hash_file('SHA384', 'composer-setup.php') === trim(file_get_contents('composer-installer.sig'))) { echo 'Installer verified'; } else { echo 'Installer corrupt'; unlink('composer-setup.php'); } echo PHP_EOL;"
+RUN /usr/local/bin/php composer-setup.php
+RUN /usr/local/bin/php -r "unlink('composer-setup.php');"
+RUN /usr/local/bin/php -r "unlink('composer-installer.sig');"
+RUN /usr/local/bin/php composer.phar install -n
 
 # Switch back to ROOT
 USER root
