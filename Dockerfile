@@ -38,13 +38,13 @@ RUN rm -rf /var/www/html && \
     ln -s /var/www/web /var/www/html
 
 # RUN COMPOSER to generate parameters.yml file
-RUN /usr/local/bin/php -r "copy('https://getcomposer.org/installer', 'composer-setup.php');" && \
-    /usr/local/bin/php -r "copy('https://composer.github.io/installer.sig', 'composer-installer.sig');" && \
-    /usr/local/bin/php -r "if (hash_file('SHA384', 'composer-setup.php') === trim(file_get_contents('composer-installer.sig'))) { echo 'Installer verified'; } else { echo 'Installer corrupt'; unlink('composer-setup.php'); } echo PHP_EOL;" && \
-    /usr/local/bin/php composer-setup.php && \
-    /usr/local/bin/php -r "unlink('composer-setup.php');" && \
-    /usr/local/bin/php -r "unlink('composer-installer.sig');" && \
-    /usr/local/bin/php composer.phar install -n -q
+RUN /usr/local/bin/php -r "copy('https://getcomposer.org/installer', 'composer-setup.php');"
+RUN /usr/local/bin/php -r "copy('https://composer.github.io/installer.sig', 'composer-installer.sig');"
+RUN /usr/local/bin/php -r "if (hash_file('SHA384', 'composer-setup.php') === trim(file_get_contents('composer-installer.sig'))) { echo 'Installer verified'; } else { echo 'Installer corrupt'; unlink('composer-setup.php'); } echo PHP_EOL;"
+RUN /usr/local/bin/php composer-setup.php
+RUN /usr/local/bin/php -r "unlink('composer-setup.php');"
+RUN /usr/local/bin/php -r "unlink('composer-installer.sig');"
+RUN /usr/local/bin/php composer.phar install -n -q
 
 # SET UP DEPLOYMENT KEY TO ALLOW GIT PULL
 RUN  mkdir -p ~/.ssh && \
