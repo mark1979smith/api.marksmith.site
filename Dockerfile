@@ -44,7 +44,7 @@ RUN /usr/local/bin/php -r "if (hash_file('SHA384', 'composer-setup.php') === tri
 RUN /usr/local/bin/php composer-setup.php
 RUN /usr/local/bin/php -r "unlink('composer-setup.php');"
 RUN /usr/local/bin/php -r "unlink('composer-installer.sig');"
-RUN /usr/local/bin/php composer.phar install -n -q
+RUN /usr/local/bin/php composer.phar install -n
 
 # SET UP DEPLOYMENT KEY TO ALLOW GIT PULL
 RUN  mkdir -p ~/.ssh && \
