@@ -39,9 +39,11 @@ RUN rm -rf /var/www/html && \
 
 # RUN COMPOSER to generate parameters.yml file
 RUN /usr/local/bin/php -r "copy('https://getcomposer.org/installer', 'composer-setup.php');" && \
-    /usr/local/bin/php -r '$composerHash = file_get_contents("https://composer.github.io/installer.sig"); if (hash_file("SHA384", "composer-setup.php") === trim($composerHash)) { echo "Installer verified"; } else { echo "Installer corrupt"; unlink("composer-setup.php"); } echo PHP_EOL;' && \
+    /usr/local/bin/php -r "copy('https://composer.github.io/installer.sig', 'composer-installer.sig');" && \
+    /usr/local/bin/php -r "if (hash_file('SHA384', 'composer-setup.php') === trim(file_get_contents('composer-installer.sig'))) { echo 'Installer verified'; } else { echo 'Installer corrupt'; unlink('composer-setup.php'); } echo PHP_EOL;" && \
     /usr/local/bin/php composer-setup.php && \
     /usr/local/bin/php -r "unlink('composer-setup.php');" && \
+    /usr/local/bin/php -r "unlink('composer-installer.sig');" && \
     /usr/local/bin/php composer.phar install -n -q
 
 # SET UP DEPLOYMENT KEY TO ALLOW GIT PULL
