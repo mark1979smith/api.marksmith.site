@@ -49,39 +49,44 @@ class Article
      */
     private $articleCreated;
 
-
     /**
-     * Get id
-     *
      * @return int
      */
-    public function getId()
+    public function getId(): int
     {
         return $this->id;
     }
 
     /**
-     * Set articleName
-     *
-     * @param string $articleName
+     * @param int $id
      *
      * @return Article
      */
-    public function setArticleName($articleName)
+    public function setId(int $id): Article
     {
-        $this->articleName = $articleName;
+        $this->id = $id;
 
         return $this;
     }
 
     /**
-     * Get articleName
-     *
      * @return string
      */
-    public function getArticleName()
+    public function getArticleName(): string
     {
         return $this->articleName;
+    }
+
+    /**
+     * @param string $articleName
+     *
+     * @return Article
+     */
+    public function setArticleName(string $articleName): Article
+    {
+        $this->articleName = $articleName;
+
+        return $this;
     }
 
     /**
@@ -143,7 +148,6 @@ class Article
 
         return $this;
     }
-
 
 }
 
