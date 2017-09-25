@@ -3,12 +3,15 @@
 namespace AppBundle\Entity;
 
 use Doctrine\ORM\Mapping as ORM;
+use Doctrine\ORM\Mapping\HasLifecycleCallbacks;
+use Doctrine\ORM\Mapping\PrePersist;
 
 /**
  * Article
  *
  * @ORM\Table(name="article")
  * @ORM\Entity(repositoryClass="AppBundle\Repository\ArticleRepository")
+ * @@ORM\Entity @HasLifecycleCallbacks
  */
 class Article
 {
@@ -45,7 +48,7 @@ class Article
     /**
      * @var string
      *
-     * @ORM\Column(name="created", type="datetime")
+     * @ORM\Column(name="created", type="datetime", options={"default": 0})
      */
     private $articleCreated;
 
@@ -138,15 +141,22 @@ class Article
     }
 
     /**
-     * @param string $articleCreated
+     * @param \DateTime $articleCreated
      *
      * @return Article
      */
-    public function setArticleCreated(string $articleCreated): Article
+    public function setArticleCreated(\DateTime $articleCreated): Article
     {
-        $this->articleCreated = $articleCreated;
+        $this->articleCreated = $articleCreated->format('Y-m-d H:i:s');
 
         return $this;
+    }
+
+    /** @PrePersist */
+    public function onPrePersistSetCreatedDate()
+    {
+        $articleCreated = new \DateTime();
+        $this->articleCreated = $articleCreated;
     }
 
 }
