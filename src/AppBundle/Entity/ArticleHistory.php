@@ -1,20 +1,24 @@
 <?php
-
+/**
+ * Created by PhpStorm.
+ * User: mark.smith
+ * Date: 02/10/2017
+ * Time: 12:18
+ */
 namespace AppBundle\Entity;
 
 use Doctrine\ORM\Mapping as ORM;
 use Doctrine\ORM\Mapping\HasLifecycleCallbacks;
 use Doctrine\ORM\Mapping\PrePersist;
-use Doctrine\ORM\Mapping\PreUpdate;
 
 /**
  * Article
  *
- * @ORM\Table(name="article")
- * @ORM\Entity(repositoryClass="AppBundle\Repository\ArticleRepository")
+ * @ORM\Table(name="article_history")
+ * @ORM\Entity(repositoryClass="AppBundle\Repository\ArticleHistoryRepository")
  * @ORM\Entity @HasLifecycleCallbacks
  */
-class Article
+class ArticleHistory
 {
     /**
      * @var int
@@ -24,6 +28,13 @@ class Article
      * @ORM\GeneratedValue(strategy="AUTO")
      */
     private $id;
+
+    /**
+     * @var int
+     *
+     * @ORM\Column(name="article_id", type="smallint",  options={"unsigned"=true})
+     */
+    private $articleId;
 
     /**
      * @var string
@@ -38,6 +49,7 @@ class Article
      * @ORM\Column(name="slug", type="string", length=40)
      */
     private $articleSlug;
+
 
     /**
      * @var string
@@ -61,16 +73,9 @@ class Article
     private $articleCreated;
 
     /**
-     * @var string
-     *
-     * @ORM\Column(name="updated", type="datetime", options={"default": 0})
+     * @return int
      */
-    private $articleUpdated;
-
-    /**
-     * @return null|int
-     */
-    public function getId()
+    public function getId(): int
     {
         return $this->id;
     }
@@ -80,7 +85,7 @@ class Article
      *
      * @return Article
      */
-    public function setId(int $id): Article
+    public function setId(int $id): ArticleHistory
     {
         $this->id = $id;
 
@@ -100,7 +105,7 @@ class Article
      *
      * @return Article
      */
-    public function setArticleName(string $articleName): Article
+    public function setArticleName(string $articleName): ArticleHistory
     {
         $this->articleName = $articleName;
 
@@ -120,7 +125,7 @@ class Article
      *
      * @return Article
      */
-    public function setArticleSlug(string $articleSlug): Article
+    public function setArticleSlug(string $articleSlug): ArticleHistory
     {
         $this->articleSlug = $articleSlug;
 
@@ -140,7 +145,7 @@ class Article
      *
      * @return Article
      */
-    public function setArticleBody(string $articleBody): Article
+    public function setArticleBody(string $articleBody): ArticleHistory
     {
         $this->articleBody = $articleBody;
 
@@ -160,9 +165,29 @@ class Article
      *
      * @return Article
      */
-    public function setArticleCreated(\DateTime $articleCreated): Article
+    public function setArticleCreated(\DateTime $articleCreated): ArticleHistory
     {
         $this->articleCreated = $articleCreated->format('Y-m-d H:i:s');
+
+        return $this;
+    }
+
+    /**
+     * @return int
+     */
+    public function getArticleId(): int
+    {
+        return $this->articleId;
+    }
+
+    /**
+     * @param int $articleId
+     *
+     * @return ArticleHistory
+     */
+    public function setArticleId(int $articleId): ArticleHistory
+    {
+        $this->articleId = $articleId;
 
         return $this;
     }
@@ -187,26 +212,6 @@ class Article
         return $this;
     }
 
-    /**
-     * @return string
-     */
-    public function getArticleUpdated(): string
-    {
-        return $this->articleUpdated;
-    }
-
-    /**
-     * @param string $articleUpdated
-     *
-     * @return Article
-     */
-    public function setArticleUpdated(string $articleUpdated): Article
-    {
-        $this->articleUpdated = $articleUpdated;
-
-        return $this;
-    }
-
     /** @PrePersist */
     public function onPrePersistSetCreatedDate()
     {
@@ -214,12 +219,4 @@ class Article
         $this->articleCreated = $articleCreated;
     }
 
-    /** @PreUpdate */
-    public function onPreUpdateSetUpdatedDate()
-    {
-        $articleUpdated = new \DateTime();
-        $this->articleUpdated = $articleUpdated;
-    }
-
 }
-

@@ -35,13 +35,46 @@ class DefaultController extends Controller
                         break;
 
                     case 'mysql':
+                        $repository = $this->getDoctrine()->getRepository($request->get('what'));
+                        $queryData = [];
+                        if ($request->get('data')) {
+                            $entity = unserialize(base64_decode($request->get('data')));
 
+                            /** @var \Doctrine\ORM\Mapping\ClassMetadata $mappings */
+                            $mappings = $this->getDoctrine()->getManager()->getClassMetadata(get_class($entity));
+                            /** @var array $fieldNames */
+                            $fieldNames = $mappings->getFieldNames();
+                            /** @var array $columnNames */
+                            $columnNames = $mappings->getColumnNames();
+                            /** @var array $dbMapping */
+                            $dbMapping = array_combine($columnNames, $fieldNames);
+
+                            foreach ($dbMapping as $dbColumn => $entityMethodName) {
+                                $value = $entity->{'get'.ucfirst($entityMethodName)}() ?: '';
+                                if ($value) {
+                                    $queryData[$entityMethodName] = $value;
+                                }
+                            }
+                        }
+
+                        $returnedData['results'] = base64_encode(serialize($repository->findBy($queryData)));
                         break;
                 }
                 break;
 
             case $request::METHOD_PUT: // Used to modify an existing object on the server
+                switch ($request->get('storage')) {
+                    case 'mysql':
+                        $entity = unserialize(base64_decode($request->get('data')));
 
+                        $em = $this->getDoctrine()->getManager();
+
+                        $em->merge($entity);
+                        $em->flush();
+
+                        $returnedData['result'] = $entity->getId();
+                        break;
+                }
                 break;
 
             case $request::METHOD_POST: // Used to create a new object on the server
@@ -56,19 +89,14 @@ class DefaultController extends Controller
                         break;
 
                     case 'mysql':
-                        $returnedData['result'] = unserialize(base64_decode($request->get('data')));
+                        $entity = unserialize(base64_decode($request->get('data')));
 
                         $em = $this->getDoctrine()->getManager();
-                        /** @var \AppBundle\Entity\Article $data */
-                        $data = $returnedData['result'];
 
-                        $article = new Article();
-                        $article->setArticleSlug($data['articleSlug']);
-                        $article->setArticleName($data['articleName']);
-                        $article->setArticleBody($data['articleBody']);
-
-                        $em->persist($article);
+                        $em->persist($entity);
                         $em->flush();
+
+                        $returnedData['result'] = $entity->getId();
                         break;
                 }
                 break;
