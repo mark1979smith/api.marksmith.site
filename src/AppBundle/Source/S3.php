@@ -31,7 +31,7 @@ class S3 extends SourceAbstract implements SourceInterface
             'Bucket' => $s3Service->getBucket(),
         ]);
 
-        return ['result' => $response];
+        return ['result' => serialize($response)];
     }
 
     public function post()
@@ -42,8 +42,9 @@ class S3 extends SourceAbstract implements SourceInterface
         $s3Client = $s3Service->get();
         $response = $s3Client->putObject([
             'Bucket' => $s3Service->getBucket(),
-            'Key' => $this->what,
-            'Body' => $this->data
+            'Key'    => $this->what,
+            'Body'   => $this->data,
+            'ACL'    => 'public-read',
         ]);
 
         return ['result' => $response];
