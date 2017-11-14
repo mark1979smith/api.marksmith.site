@@ -50,6 +50,8 @@ class Mysql extends SourceAbstract implements SourceInterface
         $em->flush();
 
         $returnedData['result'] = $this->data->getId();
+
+        return $returnedData;
     }
 
     public function put()
