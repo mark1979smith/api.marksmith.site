@@ -3,6 +3,9 @@
 parameters:
     redis_host: redis
     redis_port: 6379
+    aws.s3.version: 'latest'
+    aws.s3.region: 'eu-west-2'
+    aws.s3.bucket: 'marksmith.site'
 
 services:
     # default configuration for services in *this* file
@@ -36,7 +39,15 @@ services:
         arguments:
             $redisHost: '%redis_host%'
             $redisPort: '%redis_port%'
+
+    app.aws.s3:
+        class: AppBundle\Utils\S3Client
+        public: true
+        arguments:
+            $version: "%aws.s3.version%"
+            $region: "%aws.s3.region%"
+            $bucket: "%aws.s3.bucket%"
     # add more services, or override services that need manual wiring
     # AppBundle\Service\ExampleService:
-    #     arguments:
+    #     argu  ments:
     #         $someArgument: 'some_value'
