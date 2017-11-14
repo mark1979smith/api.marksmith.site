@@ -8,8 +8,9 @@
 
 namespace AppBundle\Utils;
 
+use \Aws\S3\S3Client;
 
-class S3Client
+class AwsS3Client
 {
     /** @var  string */
     protected $version;
@@ -36,9 +37,9 @@ class S3Client
 
     public function get()
     {
-        $s3 = new \Aws\S3\S3Client([
+        $s3 = new S3Client([
             'version' => $this->getVersion(),
-            'region'  => $this->getRegion()
+            'region'  => $this->getRegion(),
         ]);
 
         return $s3;
@@ -57,7 +58,7 @@ class S3Client
      *
      * @return S3Client
      */
-    public function setVersion(string $version): S3Client
+    public function setVersion(string $version): AwsS3Client
     {
         $this->version = $version;
 
@@ -77,7 +78,7 @@ class S3Client
      *
      * @return S3Client
      */
-    public function setRegion(string $region): S3Client
+    public function setRegion(string $region): AwsS3Client
     {
         $this->region = $region;
 
@@ -97,7 +98,7 @@ class S3Client
      *
      * @return S3Client
      */
-    public function setBucket(string $bucket): S3Client
+    public function setBucket(string $bucket): AwsS3Client
     {
         $this->bucket = $bucket;
 

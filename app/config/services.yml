@@ -41,7 +41,7 @@ services:
             $redisPort: '%redis_port%'
 
     app.aws.s3:
-        class: AppBundle\Utils\S3Client
+        class: AppBundle\Utils\AwsS3Client
         public: true
         arguments:
             $version: "%aws.s3.version%"
