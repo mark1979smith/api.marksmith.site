@@ -38,7 +38,10 @@ class DefaultController extends Controller
             $sourceClass->setData(unserialize(base64_decode($request->get('data'))));
         }
         $returnedSourceData = $sourceClass->{strtolower($request->getRealMethod())}();
-        $returnedData = $returnedData + $returnedSourceData;
+        if (is_array($returnedSourceData)) {
+            $returnedData = $returnedData + $returnedSourceData;
+        }
+
 
         $response = new Response(
             '',
