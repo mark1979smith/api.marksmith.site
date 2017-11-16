@@ -36,7 +36,7 @@ class S3 extends SourceAbstract implements SourceInterface
 
     public function post()
     {
-        /** @var \AppBundle\Utils\S3Client $s3Service */
+        /** @var \AppBundle\Utils\AwsS3Client $s3Service */
         $s3Service = $this->container->get('app.aws.s3');
         /** @var \Aws\S3\S3Client $s3Client */
         $s3Client = $s3Service->get();
