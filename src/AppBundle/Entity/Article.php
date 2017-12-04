@@ -54,14 +54,14 @@ class Article
     private $articleBody;
 
     /**
-     * @var string
+     * @var string|null
      *
      * @ORM\Column(name="created", type="datetime", options={"default": 0})
      */
     private $articleCreated;
 
     /**
-     * @var string
+     * @var string|null
      *
      * @ORM\Column(name="updated", type="datetime", options={"default": 0})
      */
@@ -148,9 +148,9 @@ class Article
     }
 
     /**
-     * @return string
+     * @return string|null
      */
-    public function getArticleCreated(): string
+    public function getArticleCreated(): ?string
     {
         return $this->articleCreated;
     }
@@ -188,9 +188,9 @@ class Article
     }
 
     /**
-     * @return string
+     * @return string|null
      */
-    public function getArticleUpdated(): string
+    public function getArticleUpdated(): ?string
     {
         return $this->articleUpdated;
     }
@@ -212,6 +212,7 @@ class Article
     {
         $articleCreated = new \DateTime();
         $this->articleCreated = $articleCreated;
+        $this->articleUpdated = $articleCreated;
     }
 
     /** @PreUpdate */
